@@ -32,7 +32,8 @@ jobs:
 
           echo "Haciendo pull del último código"
           git pull origin main
-
+          
+          chmod +x gradlew
           echo "Compilando la app con Gradle"
           ./gradlew build -x test
 
