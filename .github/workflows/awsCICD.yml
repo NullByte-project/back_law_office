@@ -28,7 +28,7 @@ jobs:
         ssh -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
           set -e
           echo "Entrando al directorio de la app"
-          cd /home/ec2-user/law-office
+          cd /home/ec2-user/back_law_office
 
           echo "Haciendo pull del último código"
           git pull origin main
