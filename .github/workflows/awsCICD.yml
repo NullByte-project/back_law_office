@@ -32,6 +32,7 @@ jobs:
           cd /home/ec2-user/back_law_office
           
           echo "Haciendo pull del último código"
+          git restore .
           git pull origin main
           
           echo "Actualizando application.properties con variables de BD"
