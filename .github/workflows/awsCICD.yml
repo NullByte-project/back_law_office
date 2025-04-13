@@ -45,6 +45,8 @@ jobs:
           chmod +x gradlew
           ./gradlew build -x test
 
+          ./gradlew bootJar
+
           echo "Deteniendo el proceso anterior"
           pkill -f '.jar' || true
 
