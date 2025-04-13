@@ -32,13 +32,14 @@ jobs:
           
           echo "Haciendo pull del último código"
           git pull origin main
+          
+          echo "Actualizando application.properties con variables de BD"
+          sed -i "s|\${DB_HOST}|${{ secrets.DB_HOST }}|g" src/main/resources/application.properties
+          sed -i "s|\${DB_PORT}|${{ secrets.DB_PORT }}|g" src/main/resources/application.properties
+          sed -i "s|\${DB_NAME}|${{ secrets.DB_NAME }}|g" src/main/resources/application.properties
+          sed -i "s|\${DB_USERNAME}|${{ secrets.DB_USERNAME }}|g" src/main/resources/application.properties
+          sed -i "s|\${DB_PASSWORD}|${{ secrets.DB_PASSWORD }}|g" src/main/resources/application.properties
 
-          echo "tomando datos de conexión a BD"
-          export DB_HOST={{secrets.DB_HOST}}
-          export DB_NAME={{secrets.DB_NAME}}
-          export DB_PASSWORD={{secrets.DB_PASSWORD}}
-          export DB_USERNAME={{secrets.DB_USERNAME}}
-          export DB_PORT={{secrets.DB_PORT}}
 
           
           echo "Compilando la app con Gradle"
