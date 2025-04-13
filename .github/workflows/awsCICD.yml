@@ -39,7 +39,11 @@ jobs:
           export DB_PASSWORD={{secrets.DB_PASSWORD}}
           export DB_USERNAME={{secrets.DB_USERNAME}}
           export DB_PORT={{secrets.DB_PORT}}
-          
+
+          echo "Exportando variables de entorno para java"
+          export JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto
+          export PATH=$JAVA_HOME/bin:$PATH
+
           
           echo "Compilando la app con Gradle"
           chmod +x gradlew
