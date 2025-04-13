@@ -29,12 +29,20 @@ jobs:
           set -e
           echo "Entrando al directorio de la app"
           cd /home/ec2-user/back_law_office
-
+          
           echo "Haciendo pull del último código"
           git pull origin main
+
+          echo "tomando datos de conexión a BD"
+          export DB_HOST={{secrets.DB_HOST}}
+          export DB_NAME={{secrets.DB_NAME}}
+          export DB_PASSWORD={{secrets.DB_PASSWORD}}
+          export DB_USERNAME={{secrets.DB_USERNAME}}
+          export DB_PORT={{secrets.DB_PORT}}
           
-          chmod +x gradlew
+          
           echo "Compilando la app con Gradle"
+          chmod +x gradlew
           ./gradlew build -x test
 
           echo "Deteniendo el proceso anterior"
