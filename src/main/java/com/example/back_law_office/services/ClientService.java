@@ -24,9 +24,9 @@ public class ClientService {
     // Crear un cliente
     public ClientDTO createClient(CreateClientDTO createClientDTO) {
         Client client = modelMapper.map(createClientDTO, Client.class);
-        // Asegurarse de que el SocioEconomicStudy no esté "detached"
+    
         if (client.getSocioeconomicStudy() != null) {
-            client.getSocioeconomicStudy().setId(null); // Asegúrate de que sea tratado como una nueva entidad
+            client.getSocioeconomicStudy().setId(null);
         }
         Client savedClient = clientRepository.save(client);
         return modelMapper.map(savedClient, ClientDTO.class);
