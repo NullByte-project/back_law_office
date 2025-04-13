@@ -14,5 +14,5 @@ public class CreateClientDTO {
     private String email;
     private String address;
     private String city;
-    private CreateSocioeconomicStudyDTO socioeconomicStudy; // FK a SocioEconomicStudy
+    private CreateSocioeconomicStudyDTO socioeconomicStudy; 
 }

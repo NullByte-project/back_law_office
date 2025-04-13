@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import lombok.Data;
 
@@ -50,8 +51,8 @@ public class Client {
     @Column(name = "city")
     private String city;
 
-    @OneToOne
-    @JoinColumn(name = "socioeconomic_study_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "socioeconomic_study_id", referencedColumnName = "id")
     private SocioEconomicStudy socioeconomicStudy;
 
 }
