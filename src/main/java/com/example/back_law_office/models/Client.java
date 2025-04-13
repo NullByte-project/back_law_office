@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import lombok.Data;
@@ -47,4 +49,9 @@ public class Client {
 
     @Column(name = "city")
     private String city;
+
+    @OneToOne
+    @JoinColumn(name = "socioeconomic_study_id")
+    private SocioEconomicStudy socioeconomicStudy;
+
 }
