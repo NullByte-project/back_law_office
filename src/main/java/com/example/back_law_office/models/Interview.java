@@ -39,6 +39,6 @@ public class Interview {
     @Column(name = "legal_concept", nullable = false)
     private String legalConcept;
 
-    @Column(name = "reference")
-    private String reference;
+    @Column(name = "action")
+    private String action;
 }

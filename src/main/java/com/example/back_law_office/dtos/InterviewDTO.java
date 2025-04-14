@@ -12,6 +12,6 @@ public class InterviewDTO {
     private Long responsibleId;
     private Long clientId;
     private String legalConcept;
-    private String reference;
-    private Long socioeconomicStudyId;
+    private String action;
+
 }

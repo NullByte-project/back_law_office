@@ -1,16 +1,20 @@
 package com.example.back_law_office.dtos;
 
-import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class CreateInterviewDTO {
+    @NotBlank(message = "La descripción fáctica es obligatoria")
     private String factualDescription;
-    private LocalDateTime creationDate;
+    @NotNull(message = "El responsable es obligatorio")
     private Long responsibleId;
+    @NotNull(message = "El cliente es obligatorio")
     private Long clientId;
+    @NotBlank(message = "El concepto jurídico es obligatorio")
     private String legalConcept;
-    private String reference;
-    private CreateSocioeconomicStudyDTO socioeconomicStudy;
+    @NotBlank(message = "La acción a tomar es obligatoria")
+    private String action;
 }

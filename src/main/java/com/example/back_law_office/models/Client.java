@@ -7,6 +7,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
+import java.time.LocalDateTime;
+
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import lombok.Data;
@@ -36,8 +40,8 @@ public class Client {
     @Column(name = "identification", nullable = false, unique = true)
     private String identification;
 
-    @Column(name = "age")
-    private Integer age;
+    @Column(name = "birth_date")
+    private LocalDateTime birthDate;
 
     @Column(name = "phone")
     private String phone;
@@ -50,6 +54,10 @@ public class Client {
 
     @Column(name = "city")
     private String city;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "diferential_approaches_id", referencedColumnName = "id")
+    private DiferentialApproaches diferentialApproaches;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "socioeconomic_study_id", referencedColumnName = "id")

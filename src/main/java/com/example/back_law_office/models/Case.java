@@ -31,9 +31,9 @@ public class Case {
     @Column(name = "reference")
     private String reference;
 
-    @OneToOne
+    /* @OneToOne
     @JoinColumn(name = "interview_id", nullable = false)
-    private Interview interview;
+    private Interview interview; */
 
     // Agregar lo de los procesos
 }

@@ -1,12 +1,19 @@
 package com.example.back_law_office.services;
 
 import com.example.back_law_office.dtos.CreateClientDTO;
+import com.example.back_law_office.dtos.CreateSocioeconomicStudyDTO;
 import com.example.back_law_office.dtos.ClientDTO;
 import com.example.back_law_office.models.Client;
+import com.example.back_law_office.models.SocioEconomicStudy;
 import com.example.back_law_office.repositories.ClientRepository;
+
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,14 +29,30 @@ public class ClientService {
     private ModelMapper modelMapper;
 
     // Crear un cliente
-    public ClientDTO createClient(CreateClientDTO createClientDTO) {
-        Client client = modelMapper.map(createClientDTO, Client.class);
-    
-        if (client.getSocioeconomicStudy() != null) {
-            client.getSocioeconomicStudy().setId(null);
+    public ClientDTO createClient(CreateClientDTO createClientDTO){
+        try{
+            
+            Client client = modelMapper.map(createClientDTO, Client.class);
+            if (client.getDiferentialApproaches() != null) {
+                client.getDiferentialApproaches().setId(null);
+            }
+            Client savedClient = clientRepository.save(client);
+            return modelMapper.map(savedClient, ClientDTO.class);
+        }catch(Exception e){
+            this.handleException(e);
+            return null;
         }
-        Client savedClient = clientRepository.save(client);
-        return modelMapper.map(savedClient, ClientDTO.class);
+    }
+
+    public ClientDTO setSocioeconomicStudy(Long clientId, CreateSocioeconomicStudyDTO socioeconomicStudyDTO) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado con ID: " + clientId));
+        
+        client.setSocioeconomicStudy(modelMapper.map(socioeconomicStudyDTO, SocioEconomicStudy.class));
+
+        client.getSocioeconomicStudy().setId(null); 
+        Client updatedClient = clientRepository.save(client);
+        return modelMapper.map(updatedClient, ClientDTO.class);
     }
 
     // Obtener todos los clientes
@@ -62,6 +85,14 @@ public class ClientService {
             clientRepository.deleteById(id);
         } else {
             throw new RuntimeException("Cliente no encontrado con ID: " + id);
+        }
+    }
+
+    private void handleException(Exception e) {
+        if (e instanceof DataIntegrityViolationException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error de integridad de datos: " + e.getMessage(), e);
+        } else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor: " + e.getMessage(), e);
         }
     }
 }

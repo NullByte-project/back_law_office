@@ -1,5 +1,7 @@
 package com.example.back_law_office.dtos;
 
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
 @Data
@@ -10,10 +12,11 @@ public class ClientDTO {
     private String secondLastName;
     private String typeDoc;
     private String identification;
-    private Integer age;
+    private LocalDateTime birthDate;
     private String phone;
     private String email;
     private String address;
     private String city;
-    private CreateSocioeconomicStudyDTO socioeconomicStudy; // FK a SocioEconomicStudy
+    private CreateSocioeconomicStudyDTO socioeconomicStudy; 
+    private DiferencialAproachesDTO diferentialApproaches;
 }

@@ -5,8 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -20,9 +18,8 @@ public class SocioEconomicStudy {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "household_id", nullable = false)
-    private HouseHoldsTypes household;
+    @Column(name = "household_type")
+    private String household;
 
     @Column(name = "description", nullable = false)
     private String description;

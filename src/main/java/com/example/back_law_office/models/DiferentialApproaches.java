@@ -16,6 +16,18 @@ public class DiferentialApproaches {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+    @Column(name = "sex")
+    private String sex;
+
+    @Column(name = "gender_identity")
+    private String genderIdentity;
+
+    @Column(name = "ethnic_group")
+    private String ethnicGroup;
+
+    @Column(name = "disability")
+    private String disability;
+
+    @Column(name = "armed_conflict_victim")
+    private boolean armedConflictVictim;
 }
