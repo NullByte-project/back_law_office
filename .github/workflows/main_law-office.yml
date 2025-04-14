@@ -26,7 +26,7 @@ jobs:
 
       - name: Give execute permissions to Gradle wrapper
         run: chmod +x ./gradlew
-        
+
       - name: Build with Gradle
         run: ./gradlew clean build -x test
 
@@ -58,26 +58,6 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5B21925D799743BCBFCDE9FB2EC3463F }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_67FA359EC70A4AED9A9D382245891DD9 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8E440A11D2AC432E87C451E21661AC07 }}
-
-      - name: Replace DB connection variables
-        run: |
-          # Define variables from secrets
-          DB_HOST="${{ secrets.DB_HOST }}"
-          DB_PORT="${{ secrets.DB_PORT }}"
-          DB_NAME="${{ secrets.DB_NAME }}"
-          DB_USERNAME="${{ secrets.DB_USERNAME }}"
-          DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-
-          # Replace variables in application.properties
-          TEMP_FILE=$(mktemp)
-          sed -e "s|\${DB_HOST}|$DB_HOST|g" \
-              -e "s|\${DB_PORT}|$DB_PORT|g" \
-              -e "s|\${DB_NAME}|$DB_NAME|g" \
-              -e "s|\${DB_USERNAME}|$DB_USERNAME|g" \
-              -e "s|\${DB_PASSWORD}|$DB_PASSWORD|g" \
-              application.properties > "$TEMP_FILE" && mv "$TEMP_FILE" application.properties
-
-          cat application.properties
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
