@@ -2,6 +2,6 @@
 
 export $(grep -v '^#' .env | xargs)
 
-echo "Conectando a base de datos en $DB_HOST:$DB_PORT..."
+echo "Conectando a base de datos en $DB_URL..."
 
-./gradlew.bat bootRun
+./gradlew.bat bootRun --daemon

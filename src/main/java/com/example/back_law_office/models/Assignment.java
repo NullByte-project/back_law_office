@@ -7,11 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "assignments")
 public class Assignment {
 
     @Id

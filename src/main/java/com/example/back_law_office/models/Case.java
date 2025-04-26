@@ -4,12 +4,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.example.back_law_office.helpers.enums.State;
+
 import lombok.Data;
 
 @Entity
@@ -26,14 +32,15 @@ public class Case {
     private LocalDateTime creationDate;
 
     @Column(name = "state", nullable = false)
-    private String state;
+    private State state;
 
-    @Column(name = "reference")
-    private String reference;
-
-    /* @OneToOne
+    @Column(name = "folder", nullable = false)
+    private String folder;
+    @OneToOne
     @JoinColumn(name = "interview_id", nullable = false)
-    private Interview interview; */
+    private Interview interview; 
 
-    // Agregar lo de los procesos
+    @OneToMany(mappedBy = "lCase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LegalAction> legalActions;
+
 }

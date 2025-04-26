@@ -13,5 +13,4 @@ public class InterviewDTO {
     private Long clientId;
     private String legalConcept;
     private String action;
-
 }

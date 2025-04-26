@@ -10,6 +10,6 @@ import com.example.back_law_office.models.Client;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findById(long id);
-    Client findByIdentification(String cc);
+    Optional<Client> findByIdentification(String cc);
     
 } 

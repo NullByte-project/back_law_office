@@ -95,4 +95,21 @@ public class ClientService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor: " + e.getMessage(), e);
         }
     }
+
+    public Client createOrUpdateClient(CreateClientDTO createClientDTO) {
+        try {
+
+            Client client = this.clientRepository.findByIdentification(createClientDTO.getIdentification())
+                    .orElse(new Client()); 
+    
+            modelMapper.map(createClientDTO, client);
+    
+            Client savedClient = clientRepository.save(client);
+    
+            return savedClient;
+        } catch (Exception e) {
+            this.handleException(e);
+            return null;
+        }
+    }
 }
