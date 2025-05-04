@@ -20,7 +20,7 @@ public class ApprovalCode {
     private Boolean used;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "case_id", nullable = true)
+    @JoinColumn(name = "legalaction_id", nullable = true)
     private LegalAction legalAction;
 
     

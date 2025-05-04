@@ -58,8 +58,8 @@ public class InterviewService {
         interview.setCreationDate(creationDate);
         Interview savedInterview = interviewRepository.save(interview);
         
-        if(savedInterview.getAction() == "recepcion"){
-            Case newCase = caseService.createCase(interviewDTO.getLCase(), savedInterview);
+        if(savedInterview.getAction().equals("recepcion")){
+            Case newCase = caseService.createCase(interviewDTO.getLegalCase(), savedInterview);
             if (newCase == null) {
                 throw new IllegalArgumentException("Invalid case data");
             }

@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class CreateLegalActionDTO {
-    private Long LCase;
     @NotBlank(message = "El codigo de aprobación es obligatorio para la creación del caso")
     private String approvalCode;
     private Long procedure;

@@ -8,6 +8,6 @@ import com.example.back_law_office.models.ApprovalCode;
 
 public interface ApprovalCodeRepository extends JpaRepository<ApprovalCode, Long> {
     // Custom query methods can be defined here if needed
-    Optional<ApprovalCode> findByCode(String code);
+    Optional<ApprovalCode> findByCodeAndUsed(String code, boolean used);
     
 } 

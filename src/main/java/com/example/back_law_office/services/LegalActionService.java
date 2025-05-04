@@ -4,7 +4,9 @@ import com.example.back_law_office.dtos.CreateLegalActionDTO;
 import com.example.back_law_office.models.ApprovalCode;
 import com.example.back_law_office.models.Case;
 import com.example.back_law_office.models.LegalAction;
+import com.example.back_law_office.models.Procedure;
 import com.example.back_law_office.repositories.LegalActionRepository;
+import com.example.back_law_office.repositories.ProcedureRepository;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,20 @@ public class LegalActionService {
 
     @Autowired
     private ApprovalCodeService approvalCodeService;
+
+    @Autowired 
+    private ProcedureRepository procedureRepository;
     // Crear una nueva acción legal
+
     public LegalAction createLegalAction(CreateLegalActionDTO legalAction, Case caseEntity) {
         Optional<ApprovalCode> approvalCode = approvalCodeService.validateApprovalCode(legalAction.getApprovalCode());
         if (approvalCode.isPresent()) {
             LegalAction newLegalAction = modelMapper.map(legalAction, LegalAction.class);
             newLegalAction.setLCase(caseEntity);
-            LegalAction savedLegalAction = modelMapper.map(legalActionRepository.save(newLegalAction), LegalAction.class);
+            Procedure procedure = procedureRepository.findById(legalAction.getProcedure())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid procedure id"));
+            newLegalAction.setProcedure(procedure);
+            LegalAction savedLegalAction = legalActionRepository.save(newLegalAction);
             ApprovalCode newApprovalCode = approvalCode.get();
             newApprovalCode.setUsed(true);
             newApprovalCode.setLegalAction(savedLegalAction);

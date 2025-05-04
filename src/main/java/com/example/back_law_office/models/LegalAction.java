@@ -25,7 +25,7 @@ public class LegalAction {
     private Procedure procedure;
 
     @Column(name = "instructions", nullable = false, length = 500)
-    private String instructios;
+    private String instructions;
 
     @Column(name = "additional_info", columnDefinition = "TEXT") 
     private String additionalInfo;

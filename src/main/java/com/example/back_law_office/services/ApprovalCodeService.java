@@ -30,7 +30,7 @@ public class ApprovalCodeService {
     }
 
     public Optional<ApprovalCode> validateApprovalCode(String code) {
-        return approvalCodeRepository.findByCode(code);
+        return approvalCodeRepository.findByCodeAndUsed(code, false);
     }
 
 

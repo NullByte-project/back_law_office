@@ -15,10 +15,6 @@ public class CreateInterviewDTO {
     private String legalConcept;
     @NotBlank(message = "La acción a tomar es obligatoria")
     private String action;
-
-    private CreateCaseDTO lCase;
-
+    private CreateCaseDTO legalCase;
     private CreateClientDTO client; 
-
-
 }
