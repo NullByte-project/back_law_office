@@ -5,7 +5,9 @@ import java.time.ZoneId;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.back_law_office.dtos.CreateInterviewDTO;
 import com.example.back_law_office.dtos.InterviewDTO;
@@ -45,11 +47,11 @@ public class InterviewService {
         interview.setAction(interviewDTO.getAction());
 
         User responsible = userRepository.findById(interviewDTO.getResponsibleId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid responsible id"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid responsible id"));
         // Guardar o actualizar el cliente
         Client client = clientService.createOrUpdateClient(interviewDTO.getClient());
         if (client == null) {
-            throw new IllegalArgumentException("Invalid client data");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid client data");
         }
 
         interview.setResponsible(responsible);
@@ -61,7 +63,7 @@ public class InterviewService {
         if(savedInterview.getAction().equals("recepcion")){
             Case newCase = caseService.createCase(interviewDTO.getLegalCase(), savedInterview);
             if (newCase == null) {
-                throw new IllegalArgumentException("Invalid case data");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid client data");
             }
         }
 

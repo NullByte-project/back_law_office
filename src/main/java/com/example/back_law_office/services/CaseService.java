@@ -1,7 +1,9 @@
 package com.example.back_law_office.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.back_law_office.dtos.CreateCaseDTO;
 import com.example.back_law_office.helpers.enums.State;
@@ -33,7 +35,7 @@ public class CaseService {
         Case savedCase = caseRepository.save(newCase);
         LegalAction legalAction = legalActionService.createLegalAction(createCaseDTO.getLegalAction(), newCase);
         if (legalAction == null) {
-            throw new IllegalArgumentException("Invalid legal action data");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error creating legal action");
         }
         return savedCase;
         
