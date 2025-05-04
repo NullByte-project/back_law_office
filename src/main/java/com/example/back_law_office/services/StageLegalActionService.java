@@ -1,0 +1,89 @@
+package com.example.back_law_office.services;
+
+import com.example.back_law_office.dtos.CreateStageDTO;
+import com.example.back_law_office.dtos.StageLegalActionDTO;
+import com.example.back_law_office.models.LegalAction;
+import com.example.back_law_office.models.Stage;
+import com.example.back_law_office.models.StageLegalAction;
+import com.example.back_law_office.repositories.LegalActionRepository;
+import com.example.back_law_office.repositories.StageLegalActionRepository;
+import com.example.back_law_office.repositories.StageRepository;
+
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+@Service
+public class StageLegalActionService {
+
+    @Autowired
+    private StageLegalActionRepository stageLegalActionRepository;
+
+    @Autowired
+    private StageRepository stageRepository;
+
+    @Autowired
+    private LegalActionRepository legalActionRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    // Crear una nueva relación StageLegalAction
+    public StageLegalActionDTO createStageLegalAction(CreateStageDTO stageLegalAction) {
+        StageLegalAction newStageLegalAction = modelMapper.map(stageLegalAction, StageLegalAction.class);
+        Stage stage = stageRepository.findById(stageLegalAction.getStageId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid stage id")); 
+        
+        newStageLegalAction.setStage(stage);
+        LegalAction legalAction = legalActionRepository.findById(stageLegalAction.getLegalActionId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid legal action id"));
+        
+        newStageLegalAction.setLegalAction(legalAction);
+        LocalDateTime now = LocalDateTime.now(java.time.ZoneId.of("America/Bogota"));
+        newStageLegalAction.setStartDate(now);
+
+        newStageLegalAction.setId(null); // Asegúrate de que el ID sea nulo antes de guardar
+        StageLegalAction savedStageLegalAction = stageLegalActionRepository.save(newStageLegalAction);
+
+
+        return modelMapper.map(savedStageLegalAction, StageLegalActionDTO.class);
+    }
+
+    // Obtener todas las relaciones StageLegalAction
+    public List<StageLegalAction> getAllStageLegalActions() {
+        return stageLegalActionRepository.findAll();
+    }
+
+    // Obtener una relación StageLegalAction por ID
+    public StageLegalAction getStageLegalActionById(Long id) {
+        return stageLegalActionRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "StageLegalAction not found"));
+    }
+
+    // Actualizar una relación StageLegalAction existente
+    public StageLegalAction updateStageLegalAction(Long id, StageLegalAction updatedStageLegalAction) {
+        return stageLegalActionRepository.findById(id).map(existingStageLegalAction -> {
+            existingStageLegalAction.setComments(updatedStageLegalAction.getComments());
+            existingStageLegalAction.setInternalDeadline(updatedStageLegalAction.getInternalDeadline());
+            existingStageLegalAction.setLegalAction(updatedStageLegalAction.getLegalAction());
+            existingStageLegalAction.setStage(updatedStageLegalAction.getStage());
+            existingStageLegalAction.setStartDate(updatedStageLegalAction.getStartDate());
+            return stageLegalActionRepository.save(existingStageLegalAction);
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "StageLegalAction not found"));
+    }
+
+    // Eliminar una relación StageLegalAction por ID
+    public void deleteStageLegalAction(Long id) {
+        if (!stageLegalActionRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "StageLegalAction not found");
+        }
+        stageLegalActionRepository.deleteById(id);
+    }
+}
