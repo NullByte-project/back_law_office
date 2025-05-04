@@ -1,17 +1,11 @@
 package com.example.back_law_office.dtos;
 
-import lombok.Data;
 
-import java.time.LocalDate;
+import lombok.Data;
 
 @Data
 public class CreateStageDTO {
-
-    private String comments;
-
-    private LocalDate internalDeadline;
-
-    private Long legalActionId;
-
-    private Long stageId;
+    private String name;
+    private String description;
+    private Integer externalDeadLine;
 }

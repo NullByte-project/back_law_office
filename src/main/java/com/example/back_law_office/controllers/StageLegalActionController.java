@@ -1,6 +1,6 @@
 package com.example.back_law_office.controllers;
 
-import com.example.back_law_office.dtos.CreateStageDTO;
+import com.example.back_law_office.dtos.CreateStageLegalActionDTO;
 import com.example.back_law_office.dtos.StageLegalActionDTO;
 import com.example.back_law_office.services.StageLegalActionService;
 
@@ -18,7 +18,7 @@ public class StageLegalActionController {
     private StageLegalActionService stageService;
 
     @PostMapping("/create")
-    public ResponseEntity<StageLegalActionDTO> createStage(@RequestBody CreateStageDTO createStageDTO) {
+    public ResponseEntity<StageLegalActionDTO> createStage(@RequestBody CreateStageLegalActionDTO createStageDTO) {
         StageLegalActionDTO result=  stageService.createStageLegalAction(createStageDTO);
         return ResponseEntity.status(201).body(result);
     }

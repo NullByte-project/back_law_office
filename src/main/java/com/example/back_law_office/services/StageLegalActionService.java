@@ -1,6 +1,6 @@
 package com.example.back_law_office.services;
 
-import com.example.back_law_office.dtos.CreateStageDTO;
+import com.example.back_law_office.dtos.CreateStageLegalActionDTO;
 import com.example.back_law_office.dtos.StageLegalActionDTO;
 import com.example.back_law_office.models.LegalAction;
 import com.example.back_law_office.models.Stage;
@@ -36,7 +36,7 @@ public class StageLegalActionService {
     private ModelMapper modelMapper;
 
     // Crear una nueva relación StageLegalAction
-    public StageLegalActionDTO createStageLegalAction(CreateStageDTO stageLegalAction) {
+    public StageLegalActionDTO createStageLegalAction(CreateStageLegalActionDTO stageLegalAction) {
         StageLegalAction newStageLegalAction = modelMapper.map(stageLegalAction, StageLegalAction.class);
         Stage stage = stageRepository.findById(stageLegalAction.getStageId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid stage id")); 
