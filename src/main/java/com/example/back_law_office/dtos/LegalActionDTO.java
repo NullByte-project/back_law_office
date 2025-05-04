@@ -8,6 +8,5 @@ public class LegalActionDTO {
     private String instructions;
     private String additionalInfo;
     private String state; 
-    private Long caseId;
-    private Long procedureId;
+    private ProcedureDTO procedure;
 }

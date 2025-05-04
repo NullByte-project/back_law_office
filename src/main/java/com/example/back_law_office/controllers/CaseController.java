@@ -1,7 +1,9 @@
 package com.example.back_law_office.controllers;
 
+import com.example.back_law_office.dtos.CaseDTO;
 import com.example.back_law_office.dtos.CreateLegalActionDTO;
 import com.example.back_law_office.dtos.LegalActionDTO;
+import com.example.back_law_office.dtos.ListCasesDTO;
 import com.example.back_law_office.services.CaseService;
 
 import jakarta.validation.Valid;
@@ -22,7 +24,7 @@ public class CaseController {
     @Autowired
     private CaseService caseService;
 
-    @PostMapping("/addlegalAction")
+    @PostMapping("/add-legal-action")
     public ResponseEntity<?> addLegalActionToCase(@RequestParam(name = "caseId") Long caseId, @Valid @RequestBody CreateLegalActionDTO legalActionDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream()
@@ -32,5 +34,17 @@ public class CaseController {
         }
         LegalActionDTO legalAction = caseService.addLegalActionToCase(caseId, legalActionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(legalAction);
+    }
+
+    @GetMapping("get-by-area/{areaId}")
+    public ResponseEntity<List<ListCasesDTO>> getLegalActionsByAreaId(@PathVariable(name = "areaId") Long areaId) {
+        List<ListCasesDTO> results = caseService.getCasesByArea(areaId);
+        return ResponseEntity.ok(results);
+    }
+
+    @GetMapping("/get-by-id/{id}")
+    public ResponseEntity<CaseDTO> getCaseById(@PathVariable(name = "id") Long id) {
+        CaseDTO result = caseService.getCaseById(id);
+        return ResponseEntity.ok(result);
     }
 }

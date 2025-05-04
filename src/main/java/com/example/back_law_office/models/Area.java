@@ -14,7 +14,7 @@ public class Area {
     private Long id;
 
     @Column(name = "name", nullable = false, length = 100) 
-    private String nombre;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "assistant_id", nullable = true) 
