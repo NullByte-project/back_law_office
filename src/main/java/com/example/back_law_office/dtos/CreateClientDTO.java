@@ -35,5 +35,7 @@ public class CreateClientDTO {
     private String address;
     private String city;
 
-    private DiferentialApproaches diferentialApproaches; // FK a DiferentialApproaches
+    private DiferentialApproaches diferentialApproaches; 
+
+    private CreateSocioeconomicStudyDTO socioeconomicStudy;
 }

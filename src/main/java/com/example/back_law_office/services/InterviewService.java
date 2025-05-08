@@ -5,16 +5,20 @@ import java.time.ZoneId;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.back_law_office.dtos.CreateInterviewDTO;
 import com.example.back_law_office.dtos.InterviewDTO;
 import com.example.back_law_office.models.Interview;
+import com.example.back_law_office.models.Case;
 import com.example.back_law_office.models.Client;
 import com.example.back_law_office.models.User;
 import com.example.back_law_office.repositories.InterviewRepository;
-import com.example.back_law_office.repositories.ClientRepository;
 import com.example.back_law_office.repositories.UserRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class InterviewService {
@@ -29,8 +33,13 @@ public class InterviewService {
     private UserRepository userRepository;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
+    @Autowired
+    private CaseService caseService;
+
+
+    @Transactional(rollbackOn = Exception.class)
     public InterviewDTO createInterview(CreateInterviewDTO interviewDTO) {
         Interview interview = new Interview();
         interview.setFactualDescription(interviewDTO.getFactualDescription());
@@ -38,17 +47,28 @@ public class InterviewService {
         interview.setAction(interviewDTO.getAction());
 
         User responsible = userRepository.findById(interviewDTO.getResponsibleId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid responsible id"));
-        Client client = clientRepository.findById(interviewDTO.getClientId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid client id"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid responsible id"));
+        // Guardar o actualizar el cliente
+        Client client = clientService.createOrUpdateClient(interviewDTO.getClient());
+        if (client == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid client data");
+        }
 
         interview.setResponsible(responsible);
         interview.setClient(client);
-
         LocalDateTime creationDate = LocalDateTime.now(ZoneId.of("America/Bogota"));
         interview.setCreationDate(creationDate);
-
         Interview savedInterview = interviewRepository.save(interview);
+        
+        if(savedInterview.getAction().equals("recepcion")){
+            Case newCase = caseService.createCase(interviewDTO.getLegalCase(), savedInterview);
+            if (newCase == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid client data");
+            }
+        }
+
         return modelMapper.map(savedInterview, InterviewDTO.class);
     }
+
+
 }

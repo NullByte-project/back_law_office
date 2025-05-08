@@ -9,9 +9,8 @@ public class InterviewDTO {
     private Long id;
     private String factualDescription;
     private LocalDateTime creationDate;
-    private Long responsibleId;
-    private Long clientId;
+    private UserDTO responsible;
+    private ClientDTO clientId;
     private String legalConcept;
     private String action;
-
 }
