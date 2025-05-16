@@ -22,4 +22,11 @@ public class StageLegalActionController {
         StageLegalActionDTO result=  stageService.createStageLegalAction(createStageDTO);
         return ResponseEntity.status(201).body(result);
     }
+
+
+    //haz un get para obtener todas las etapas de un procedimiento por su legal action id
+    @GetMapping("/get-by-legal-action/{legalActionId}")
+    public ResponseEntity<?> getStagesByLegalActionId(@PathVariable Long legalActionId) {
+        return ResponseEntity.ok(stageService.getStagesByLegalActionId(legalActionId));
+    }
 }

@@ -109,4 +109,18 @@ public class StageLegalActionService {
         }
         stageLegalActionRepository.deleteById(id);
     }
+    public List<StageLegalActionDTO> getStagesByLegalActionId(Long legalActionId) {
+        // Verifica que la acción legal exista
+        LegalAction legalAction = legalActionRepository.findById(legalActionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "LegalAction not found"));
+
+        // Obtiene las relaciones StageLegalAction asociadas a la acción legal
+        @SuppressWarnings("unchecked")
+        List<StageLegalAction> stageLegalActions = (List<StageLegalAction>) stageLegalActionRepository.findByLegalActionId(legalActionId);
+
+        // Mapea la lista de entidades a DTOs
+        return stageLegalActions.stream()
+                .map(stageLegalAction -> modelMapper.map(stageLegalAction, StageLegalActionDTO.class))
+                .toList();
+    }
 }
