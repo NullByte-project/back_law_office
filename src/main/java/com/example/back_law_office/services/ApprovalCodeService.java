@@ -15,31 +15,42 @@ public class ApprovalCodeService {
     @Autowired
     private ApprovalCodeRepository approvalCodeRepository;
 
-    // Crear un nuevo código de aprobación
+    /**
+     * Crea un nuevo código de aprobación.
+     * @return El código de aprobación creado.
+     */
     public ApprovalCode createApprovalCode() {
         ApprovalCode approvalCode = new ApprovalCode();
         approvalCode.setUsed(false);
         approvalCode.setCode(generateUniqueCode());
-
         return approvalCodeRepository.save(approvalCode);
     }
 
-    // Obtener todos los códigos de aprobación
+    /**
+     * Obtiene todos los códigos de aprobación.
+     * @return Una lista de códigos de aprobación.
+     */
     public List<ApprovalCode> getAllApprovalCodes() {
         return approvalCodeRepository.findAll();
     }
 
+    /**
+     * Valida un código de aprobación.
+     * @param code El código de aprobación a validar.
+     * @return Un objeto Optional que contiene el código de aprobación si es válido, o vacío si no lo es.
+     */
     public Optional<ApprovalCode> validateApprovalCode(String code) {
         return approvalCodeRepository.findByCodeAndUsed(code, false);
     }
 
 
-    // Obtener un código de aprobación por ID
-    public Optional<ApprovalCode> getApprovalCodeById(Long id) {
-        return approvalCodeRepository.findById(id);
-    }
+   
 
-    // Actualizar un código de aprobación existente
+    /**
+     * Marca un código de aprobación como usado.
+     * @param code El código de aprobación a marcar como usado.
+     * @return El código de aprobación actualizado.
+     */
     public ApprovalCode updateApprovalCode(Long id, ApprovalCode updatedApprovalCode) {
         return approvalCodeRepository.findById(id).map(existingApprovalCode -> {
             existingApprovalCode.setCode(updatedApprovalCode.getCode());
@@ -49,7 +60,10 @@ public class ApprovalCodeService {
         }).orElseThrow(() -> new RuntimeException("Código de aprobación no encontrado con ID: " + id));
     }
 
-    // Eliminar un código de aprobación por ID
+    /**
+     * Elimina un código de aprobación por su ID.
+     * @param id
+     */
     public void deleteApprovalCode(Long id) {
         if (approvalCodeRepository.existsById(id)) {
             approvalCodeRepository.deleteById(id);
@@ -58,6 +72,10 @@ public class ApprovalCodeService {
         }
     }
 
+    /**
+     * Genera un código único de 6 dígitos.
+     * @return Un código único de 6 dígitos.
+     */
     private String generateUniqueCode() {
         StringBuilder codeBuilder = new StringBuilder();
         for (int i = 0; i < 6; i++) {
