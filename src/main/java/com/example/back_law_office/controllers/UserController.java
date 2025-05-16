@@ -34,7 +34,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
-    // Otros métodos para manejar usuarios (obtener, actualizar, eliminar) se pueden agregar aquí
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
