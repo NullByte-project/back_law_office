@@ -36,6 +36,13 @@ public class CaseService {
     private ModelMapper modelMapper;
 
 
+    /**
+     * Crea un nuevo caso.
+     *
+     * @param createCaseDTO DTO con los datos del caso a crear.
+     * @param interview     Entrevista asociada al caso.
+     * @return El caso creado.
+     */
     public Case createCase(CreateCaseDTO createCaseDTO, Interview interview) {
         Case newCase = new Case();
         LocalDateTime now = LocalDateTime.now(java.time.ZoneId.of("America/Bogota"));
@@ -51,24 +58,50 @@ public class CaseService {
         return savedCase;
     }
 
+
+    /**
+     * Obtiene un caso por su ID.
+     * @param id El ID del caso.
+     * @return El caso encontrado.
+     * @throws ResponseStatusException si el caso no se encuentra.
+     */
     public CaseDTO getCaseById(Long id) {
         Case existingCase = caseRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Case not found"));
         return modelMapper.map(existingCase, CaseDTO.class);
     }
 
+
+    /**
+     * Obtiene todos los casos.
+     * @return Una lista de casos.
+     */
     public List<ListCasesDTO> getAllCases() {
         return caseRepository.findAll().stream()
                 .map(caseEntity -> modelMapper.map(caseEntity, ListCasesDTO.class))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene todos los casos con acción legal en un área específica.
+     * @param areaId El ID del área.
+     * @return Una lista de casos con acción legal en el área especificada.
+     * @throws ResponseStatusException si el área no se encuentra.
+     */
     public List<ListCasesDTO> getCasesByArea(Long areaId) {
         return caseRepository.findCasesWithLegalActionInArea(areaId).stream()
                 .map(caseEntity -> modelMapper.map(caseEntity, ListCasesDTO.class))
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * Agrega una acción legal a un caso existente.
+     * @param caseId El ID del caso al que se le agregará la acción legal.
+     * @param legalActionDTO DTO con los datos de la acción legal a agregar.
+     * @return El DTO de la acción legal agregada.
+     * @throws ResponseStatusException si el caso no se encuentra.
+     */
     public LegalActionDTO addLegalActionToCase(Long caseId, CreateLegalActionDTO legalActionDTO) {
         Case existingCase = caseRepository.findById(caseId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Case not found"));

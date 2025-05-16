@@ -39,6 +39,12 @@ public class InterviewService {
     private CaseService caseService;
 
 
+    /**
+     * Crea una nueva entrevista.
+     * @param interviewDTO DTO con los datos de la entrevista a crear.
+     * @return La entrevista creada.
+     * @throws ResponseStatusException si el responsable o el cliente no son válidos.
+     */
     @Transactional(rollbackOn = Exception.class)
     public InterviewDTO createInterview(CreateInterviewDTO interviewDTO) {
         Interview interview = new Interview();
@@ -48,7 +54,6 @@ public class InterviewService {
 
         User responsible = userRepository.findById(interviewDTO.getResponsibleId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid responsible id"));
-        // Guardar o actualizar el cliente
         Client client = clientService.createOrUpdateClient(interviewDTO.getClient());
         if (client == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid client data");

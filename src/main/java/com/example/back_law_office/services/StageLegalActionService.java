@@ -35,7 +35,12 @@ public class StageLegalActionService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Crear una nueva relación StageLegalAction
+    /**
+     * Crea una nueva relación entre Stage y LegalAction.
+     * @param stageLegalAction DTO con los datos de la relación a crear.
+     * @return La relación creada.
+     * @throws ResponseStatusException si el ID de la etapa o la acción legal no son válidos.
+     */
     public StageLegalActionDTO createStageLegalAction(CreateStageLegalActionDTO stageLegalAction) {
         StageLegalAction newStageLegalAction = modelMapper.map(stageLegalAction, StageLegalAction.class);
         Stage stage = stageRepository.findById(stageLegalAction.getStageId())
@@ -56,18 +61,32 @@ public class StageLegalActionService {
         return modelMapper.map(savedStageLegalAction, StageLegalActionDTO.class);
     }
 
-    // Obtener todas las relaciones StageLegalAction
+    /**
+     * Obtiene todas las relaciones entre Stage y LegalAction.
+     * @return Una lista de relaciones.
+     */
     public List<StageLegalAction> getAllStageLegalActions() {
         return stageLegalActionRepository.findAll();
     }
 
-    // Obtener una relación StageLegalAction por ID
+    /**
+     * Obtiene una relación entre Stage y LegalAction por su ID.
+     * @param id ID de la relación.
+     * @return La relación encontrada.
+     * @throws ResponseStatusException si la relación no se encuentra.
+     */
     public StageLegalAction getStageLegalActionById(Long id) {
         return stageLegalActionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "StageLegalAction not found"));
     }
 
-    // Actualizar una relación StageLegalAction existente
+    /**
+     * Actualiza una relación entre Stage y LegalAction por su ID.
+     * @param id ID de la relación a actualizar.
+     * @param updatedStageLegalAction DTO con los nuevos datos de la relación.
+     * @return La relación actualizada.
+     * @throws ResponseStatusException si la relación no se encuentra.
+     */
     public StageLegalAction updateStageLegalAction(Long id, StageLegalAction updatedStageLegalAction) {
         return stageLegalActionRepository.findById(id).map(existingStageLegalAction -> {
             existingStageLegalAction.setComments(updatedStageLegalAction.getComments());
@@ -79,7 +98,11 @@ public class StageLegalActionService {
         }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "StageLegalAction not found"));
     }
 
-    // Eliminar una relación StageLegalAction por ID
+    /**
+     * Elimina una relación entre Stage y LegalAction por su ID.
+     * @param id ID de la relación a eliminar.
+     * @throws ResponseStatusException si la relación no se encuentra.
+     */
     public void deleteStageLegalAction(Long id) {
         if (!stageLegalActionRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "StageLegalAction not found");

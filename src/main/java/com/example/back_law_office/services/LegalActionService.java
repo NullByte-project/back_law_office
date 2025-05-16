@@ -31,8 +31,14 @@ public class LegalActionService {
 
     @Autowired 
     private ProcedureRepository procedureRepository;
-    // Crear una nueva acción legal
-
+    
+    /**
+     * Crea una nueva actuación legal.
+     * @param legalAction DTO con los datos de la actuación legal a crear.
+     * @param caseEntity Caso asociado a la actuación legal.
+     * @throws ResponseStatusException si el código de aprobación no es válido o si la actuación legal no se puede crear.
+     * @return
+     */
     public LegalAction createLegalAction(CreateLegalActionDTO legalAction, Case caseEntity) {
         Optional<ApprovalCode> approvalCode = approvalCodeService.validateApprovalCode(legalAction.getApprovalCode());
         if (approvalCode.isPresent()) {
@@ -52,28 +58,29 @@ public class LegalActionService {
         }
     }
 
-    // Obtener todas las acciones legales
+    /**
+     * Obtiene todas las acciones legales.
+     * @return Una lista de acciones legales.
+     */
     public List<LegalAction> getAllLegalActions() {
         return legalActionRepository.findAll();
     }
 
-    // Obtener una acción legal por ID
+    /**
+     * Obtiene una acción legal por su ID.
+     * @param id El ID de la acción legal.
+     * @return La acción legal encontrada.
+     * @throws ResponseStatusException si la acción legal no se encuentra.
+     */
     public Optional<LegalAction> getLegalActionById(Long id) {
         return legalActionRepository.findById(id);
     }
 
-    // Actualizar una acción legal existente
-    /* public LegalAction updateLegalAction(Long id, LegalAction updatedLegalAction) {
-        return legalActionRepository.findById(id).map(existingLegalAction -> {
-            existingLegalAction.setCaseId(updatedLegalAction.getCaseId());
-            existingLegalAction.setProcedure(updatedLegalAction.getProcedure());
-            existingLegalAction.setInstructios(updatedLegalAction.getInstructios());
-            existingLegalAction.setAdditionalInfo(updatedLegalAction.getAdditionalInfo());
-            return legalActionRepository.save(existingLegalAction);
-        }).orElseThrow(() -> new RuntimeException("Acción legal no encontrada con ID: " + id));
-    }
- */
-    // Eliminar una acción legal por ID
+    
+    /**
+     * Actualiza una acción legal existente.
+     * @param id El ID de la acción legal a actualizar.
+     */
     public void deleteLegalAction(Long id) {
         if (legalActionRepository.existsById(id)) {
             legalActionRepository.deleteById(id);

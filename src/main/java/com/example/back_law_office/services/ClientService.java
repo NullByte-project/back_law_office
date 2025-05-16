@@ -28,7 +28,11 @@ public class ClientService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Crear un cliente
+    /**
+     * Crea un nuevo cliente.
+     * @param createClientDTO
+     * @return El cliente creado.
+     */
     public ClientDTO createClient(CreateClientDTO createClientDTO){
         try{
             
@@ -44,6 +48,13 @@ public class ClientService {
         }
     }
 
+    /**
+     * Asocia un estudio socioeconómico a un cliente existente.
+     * @param clientId id del cliente
+     * @param socioeconomicStudyDTO DTO del estudio socioeconómico
+     * @return El cliente actualizado con el estudio socioeconómico asociado.
+     * @throws ResponseStatusException si el cliente no se encuentra.
+     */
     public ClientDTO setSocioeconomicStudy(Long clientId, CreateSocioeconomicStudyDTO socioeconomicStudyDTO) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado con ID: " + clientId));
@@ -55,7 +66,10 @@ public class ClientService {
         return modelMapper.map(updatedClient, ClientDTO.class);
     }
 
-    // Obtener todos los clientes
+    /**
+     * Obtiene todos los clientes.
+     * @return Una lista de clientes.
+     */
     public List<ClientDTO> getAllClients() {
         List<Client> clients = clientRepository.findAll();
         return clients.stream()
@@ -63,14 +77,24 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
-    // Obtener un cliente por ID
+    /**
+     * Obtiene un cliente por su ID.
+     * @param id El ID del cliente.
+     * @return El cliente encontrado.
+     * @throws ResponseStatusException si el cliente no se encuentra.
+     */
     public ClientDTO getClientById(Long id) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + id));
         return modelMapper.map(client, ClientDTO.class);
     }
 
-    // Actualizar un cliente
+    /**
+     * Actualiza un cliente existente.
+     * @param id El ID del cliente a actualizar.
+     * @param createClientDTO Los nuevos datos del cliente.
+     * @return El cliente actualizado.
+     */
     public ClientDTO updateClient(Long id, CreateClientDTO createClientDTO) {
         Client existingClient = clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + id));
@@ -79,7 +103,10 @@ public class ClientService {
         return modelMapper.map(updatedClient, ClientDTO.class);
     }
 
-    // Eliminar un cliente
+    /**
+     * Elimina un cliente por su ID.
+     * @param id El ID del cliente a eliminar.
+     */
     public void deleteClient(Long id) {
         if (clientRepository.existsById(id)) {
             clientRepository.deleteById(id);
@@ -88,6 +115,10 @@ public class ClientService {
         }
     }
 
+    /**
+     * Maneja excepciones y lanza una ResponseStatusException con el mensaje adecuado.
+     * @param e La excepción a manejar.
+     */
     private void handleException(Exception e) {
         if (e instanceof DataIntegrityViolationException) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error de integridad de datos: " + e.getMessage(), e);
@@ -96,6 +127,11 @@ public class ClientService {
         }
     }
 
+    /**
+     * Crea o actualiza un cliente.
+     * @param createClientDTO DTO del cliente a crear o actualizar.
+     * @return El cliente creado o actualizado.
+     */
     public Client createOrUpdateClient(CreateClientDTO createClientDTO) {
         try {
 
@@ -103,10 +139,7 @@ public class ClientService {
                     .orElse(new Client()); 
     
             modelMapper.map(createClientDTO, client);
-    
-            Client savedClient = clientRepository.save(client);
-    
-            return savedClient;
+            return clientRepository.save(client);
         } catch (Exception e) {
             this.handleException(e);
             return null;

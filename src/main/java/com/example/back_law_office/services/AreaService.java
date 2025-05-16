@@ -28,7 +28,12 @@ public class AreaService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Crear un área
+    /**
+     * Crea una nueva área.
+     * @param createAreaDTO
+     * @return El área creada.
+     * @throws ResponseStatusException si el asistente no es válido.
+     */
     public AreaDTO createArea(CreateAreaDTO createAreaDTO) {
         User assistant = null;
         if (createAreaDTO.getAssistantId() != null) {
@@ -43,7 +48,10 @@ public class AreaService {
         return modelMapper.map(savedArea, AreaDTO.class);
     }
 
-    // Obtener todas las áreas
+    /**
+     * Obtiene todas las áreas.
+     * @return Una lista de áreas.
+     */
     public List<AreaDTO> getAllAreas() {
         List<Area> areas = areaRepository.findAll();
         return areas.stream()
@@ -51,14 +59,26 @@ public class AreaService {
                 .collect(Collectors.toList());
     }
 
-    // Obtener un área por ID
+    /**
+     * Obtiene un área por su ID.
+     * @param id El ID del área.
+     * @return El área encontrada.
+     * @throws ResponseStatusException si el área no se encuentra.
+     */
     public AreaDTO getAreaById(Long id) {
         Area area = areaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Area not found"));
         return modelMapper.map(area, AreaDTO.class);
     }
 
-    // Actualizar un área existente
+    
+    /**
+     * Actualiza un área por su ID.
+     * @param id El ID del área a actualizar.
+     * @param createAreaDTO Los nuevos datos del área.
+     * @return El área actualizada.
+     * @throws ResponseStatusException si el área no se encuentra o el asistente no es válido.
+     */
     public AreaDTO updateArea(Long id, CreateAreaDTO createAreaDTO) {
         Area existingArea = areaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Area not found"));
@@ -76,7 +96,11 @@ public class AreaService {
         return modelMapper.map(updatedArea, AreaDTO.class);
     }
 
-    // Eliminar un área por ID
+    /**
+     * Elimina un área por su ID.
+     * @param id El ID del área a eliminar.
+     * @throws ResponseStatusException si el área no se encuentra.
+     */
     public void deleteArea(Long id) {
         if (!areaRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Area not found");
