@@ -8,6 +8,7 @@ import com.example.back_law_office.models.Procedure;
 import com.example.back_law_office.repositories.LegalActionRepository;
 import com.example.back_law_office.repositories.ProcedureRepository;
 
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,9 @@ public class LegalActionService {
 
     @Autowired 
     private ProcedureRepository procedureRepository;
+
+    @Autowired
+    private NotificationProducer notificationProducer;
     // Crear una nueva acción legal
 
     public LegalAction createLegalAction(CreateLegalActionDTO legalAction, Case caseEntity) {
@@ -46,6 +50,10 @@ public class LegalActionService {
             newApprovalCode.setUsed(true);
             newApprovalCode.setLegalAction(savedLegalAction);
             approvalCodeService.updateApprovalCode(newApprovalCode.getId(), newApprovalCode);
+
+            // Enviar notificación de creación de acción legal
+            //sendNotification(savedLegalAction);
+
             return savedLegalAction;
         }else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid approval code");
@@ -81,4 +89,14 @@ public class LegalActionService {
             throw new RuntimeException("Acción legal no encontrada con ID: " + id);
         }
     }
+
+    //Enviar notificacion de creaccion de accion legal
+    public void sendNotification(LegalAction legalAction) {
+        try {
+            notificationProducer.sendLegalActionNotification(legalAction.getId());
+        } catch (Exception e) {
+            throw new RuntimeException("Error al enviar la notificación: " + e.getMessage());
+        }
+    }
+
 }
