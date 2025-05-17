@@ -54,6 +54,7 @@ public class NotificationProducer {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Procedure not found"));
         Area area = areaRepository.findById(procedure.getArea().getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Area not found"));
+        System.out.println("Area: " + area);
         User user = userRepository.findById(area.getAssistant().getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));    
         String email = user.getEmail();
