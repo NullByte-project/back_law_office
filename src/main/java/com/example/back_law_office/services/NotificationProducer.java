@@ -48,24 +48,22 @@ public class NotificationProducer {
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY, jsonMessage);
     }
 
-    public void sendLegalActionNotification(Long legalActionId) throws JsonProcessingException {
-        /* 
-        LegalAction legalAction = legalActionRepository.findById(legalActionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Legal action not found"));
-        Procedure procedure = procedureRepository.findById(legalAction.getProcedure())
+    public void sendLegalActionNotification(LegalAction legalAction) throws JsonProcessingException {
+
+        Procedure procedure = procedureRepository.findById(legalAction.getProcedure().getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Procedure not found"));
-        Area area = areaRepository.findById(procedure.getArea())
+        Area area = areaRepository.findById(procedure.getArea().getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Area not found"));
-        User user = userRepository.findById(area.getAssistant())
+        User user = userRepository.findById(area.getAssistant().getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));    
         String email = user.getEmail();
         
         MessageDTO message = new MessageDTO();
         message.setTo(email);
         message.setSubject("Se ha creado una nueva acción legal");
-        message.setBody("Se creo una nueva accion legal con id: " + legalActionId);
+        message.setBody("Se creo una nueva accion legal con id: " + legalAction.getId() + " y procedimiento: " + legalAction.getProcedure().getName());
         sendNotification(message);
-        */
+        
     }
 
     

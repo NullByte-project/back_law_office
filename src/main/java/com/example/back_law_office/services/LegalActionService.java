@@ -52,7 +52,7 @@ public class LegalActionService {
             approvalCodeService.updateApprovalCode(newApprovalCode.getId(), newApprovalCode);
 
             // Enviar notificación de creación de acción legal
-            //sendNotification(savedLegalAction);
+            sendNotification(savedLegalAction);
 
             return savedLegalAction;
         }else {
@@ -93,7 +93,7 @@ public class LegalActionService {
     //Enviar notificacion de creaccion de accion legal
     public void sendNotification(LegalAction legalAction) {
         try {
-            notificationProducer.sendLegalActionNotification(legalAction.getId());
+            notificationProducer.sendLegalActionNotification(legalAction);
         } catch (Exception e) {
             throw new RuntimeException("Error al enviar la notificación: " + e.getMessage());
         }
