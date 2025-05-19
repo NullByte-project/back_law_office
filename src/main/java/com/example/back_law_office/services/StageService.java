@@ -23,14 +23,21 @@ public class StageService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Crear una nueva etapa
+    /**
+     * Crea una nueva etapa.
+     * @param createStageDTO
+     * @return La etapa creada.
+     */
     public StageDTO createStage(CreateStageDTO createStageDTO) {
         Stage stage = modelMapper.map(createStageDTO, Stage.class);
         Stage savedStage = stageRepository.save(stage);
         return modelMapper.map(savedStage, StageDTO.class);
     }
 
-    // Obtener todas las etapas
+   /**
+    * Obtiene todas las etapas.
+    * @return Una lista de etapas.
+    */
     public List<StageDTO> getAllStages() {
         List<Stage> stages = stageRepository.findAll();
         return stages.stream()
@@ -38,14 +45,24 @@ public class StageService {
                 .collect(Collectors.toList());
     }
 
-    // Obtener una etapa por ID
+    /**
+     * Obtiene una etapa por su ID.
+     * @param id ID de la etapa a buscar.
+     * @return La etapa encontrada.
+     * @throws ResponseStatusException si la etapa no se encuentra.
+     */
     public StageDTO getStageById(Long id) {
         Stage stage = stageRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Stage not found"));
         return modelMapper.map(stage, StageDTO.class);
     }
 
-    // Actualizar una etapa existente
+    /**
+     * Actualiza una etapa existente.
+     * @param id ID de la etapa a actualizar.
+     * @param createStageDTO DTO con los nuevos datos de la etapa.
+     * @return La etapa actualizada.
+     */
     public StageDTO updateStage(Long id, CreateStageDTO createStageDTO) {
         Stage existingStage = stageRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Stage not found"));
@@ -55,7 +72,11 @@ public class StageService {
         return modelMapper.map(updatedStage, StageDTO.class);
     }
 
-    // Eliminar una etapa por ID
+    /**
+     * Elimina una etapa por su ID.
+     * @param id ID de la etapa a eliminar.
+     * @throws ResponseStatusException si la etapa no se encuentra.
+     */
     public void deleteStage(Long id) {
         if (!stageRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Stage not found");

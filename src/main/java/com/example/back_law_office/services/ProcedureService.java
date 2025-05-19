@@ -28,7 +28,12 @@ public class ProcedureService {
     @Autowired
     private ModelMapper modelMapper;
 
-    // Crear un nuevo procedimiento
+    /**
+     * Crea un nuevo procedimiento.
+     * @param createProcedureDTO DTO con los datos del procedimiento a crear.
+     * @return El procedimiento creado.
+     * @throws ResponseStatusException si el área no es válida.
+     */
     public ProcedureDTO createProcedure(CreateProcedureDTO createProcedureDTO) {
         Area area = areaRepository.findById(createProcedureDTO.getAreaId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid area ID"));
@@ -40,7 +45,10 @@ public class ProcedureService {
         return modelMapper.map(savedProcedure, ProcedureDTO.class);
     }
 
-    // Obtener todos los procedimientos
+    /**
+     * Obtiene todos los procedimientos.
+     * @return Una lista de procedimientos.
+     */
     public List<ProcedureDTO> getAllProcedures() {
         List<Procedure> procedures = procedureRepository.findAll();
         return procedures.stream()
@@ -48,13 +56,24 @@ public class ProcedureService {
                 .collect(Collectors.toList());
     }
 
-    // Obtener un procedimiento por ID
+    /**
+     * Obtiene un procedimiento por su ID.
+     * @param id ID del procedimiento.
+     * @return El procedimiento encontrado.
+     * @throws ResponseStatusException si el procedimiento no se encuentra.
+     */
     public ProcedureDTO getProcedureById(Long id) {
         Procedure procedure = procedureRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Procedure not found"));
         return modelMapper.map(procedure, ProcedureDTO.class);
     }
 
+
+    /**
+     * Obtiene todos los procedimientos asociados a un área por su ID.
+     * @param id ID del área.
+     * @return Una lista de procedimientos asociados al área.
+     */
     public List<ProcedureDTO> getProcedureByAreaId(Long id) {
         List<Procedure> procedures = procedureRepository.findByAreaId(id);
         return procedures.stream()
@@ -62,7 +81,13 @@ public class ProcedureService {
         .collect(Collectors.toList());
     }
 
-    // Actualizar un procedimiento existente
+    /**
+     * Actualiza un procedimiento por su ID.
+     * @param id ID del procedimiento a actualizar.
+     * @param createProcedureDTO DTO con los nuevos datos del procedimiento.
+     * @return El procedimiento actualizado.
+     * @throws ResponseStatusException si el procedimiento no se encuentra o si el área no es válida.
+     */
     public ProcedureDTO updateProcedure(Long id, CreateProcedureDTO createProcedureDTO) {
         Procedure existingProcedure = procedureRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Procedure not found"));
@@ -77,7 +102,11 @@ public class ProcedureService {
         return modelMapper.map(updatedProcedure, ProcedureDTO.class);
     }
 
-    // Eliminar un procedimiento por ID
+    /**
+     * Elimina un procedimiento por su ID.
+     * @param id ID del procedimiento a eliminar.
+     * @throws ResponseStatusException si el procedimiento no se encuentra.
+     */
     public void deleteProcedure(Long id) {
         if (!procedureRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Procedure not found");
