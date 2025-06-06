@@ -46,8 +46,10 @@ public class ProcedureService {
     }
 
     /**
-     * Obtiene todos los procedimientos.
-     * @return Una lista de procedimientos.
+     * Recupera todos los procedimientos almacenados en la base de datos 
+     * y los convierte a su representación en DTO.
+     *
+     * @return Lista de objetos ProcedureDTO que representan los procedimientos existentes.
      */
     public List<ProcedureDTO> getAllProcedures() {
         List<Procedure> procedures = procedureRepository.findAll();

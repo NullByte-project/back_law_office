@@ -110,15 +110,15 @@ public class StageLegalActionService {
         stageLegalActionRepository.deleteById(id);
     }
     public List<StageLegalActionDTO> getStagesByLegalActionId(Long legalActionId) {
-        // Verifica que la acción legal exista
+        // Verifica si la acción legal existe, lanza excepción si no
         LegalAction legalAction = legalActionRepository.findById(legalActionId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "LegalAction not found"));
 
-        // Obtiene las relaciones StageLegalAction asociadas a la acción legal
+        // Recupera las entidades StageLegalAction asociadas a la acción legal
         @SuppressWarnings("unchecked")
         List<StageLegalAction> stageLegalActions = (List<StageLegalAction>) stageLegalActionRepository.findByLegalActionId(legalActionId);
 
-        // Mapea la lista de entidades a DTOs
+        // Convierte la lista de entidades StageLegalAction a una lista de DTOs
         return stageLegalActions.stream()
                 .map(stageLegalAction -> modelMapper.map(stageLegalAction, StageLegalActionDTO.class))
                 .toList();
