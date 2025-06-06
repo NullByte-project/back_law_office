@@ -46,17 +46,18 @@ public class ProcedureService {
     }
 
     /**
-     * Recupera todos los procedimientos almacenados en la base de datos 
-     * y los convierte a su representación en DTO.
+     * Recupera todos los procedimientos existentes desde la base de datos
+     * y los transforma a DTO utilizando una referencia de método.
      *
-     * @return Lista de objetos ProcedureDTO que representan los procedimientos existentes.
+     * @return Lista de objetos ProcedureDTO representando los procedimientos almacenados.
      */
     public List<ProcedureDTO> getAllProcedures() {
-        List<Procedure> procedures = procedureRepository.findAll();
-        return procedures.stream()
-                .map(procedure -> modelMapper.map(procedure, ProcedureDTO.class))
+        return procedureRepository.findAll().stream()
+                .map(modelMapper::map)
+                .map(dto -> (ProcedureDTO) dto)
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Obtiene un procedimiento por su ID.
