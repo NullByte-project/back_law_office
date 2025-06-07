@@ -53,8 +53,7 @@ public class ProcedureService {
      */
     public List<ProcedureDTO> getAllProcedures() {
         return procedureRepository.findAll().stream()
-                .map(modelMapper::map)
-                .map(dto -> (ProcedureDTO) dto)
+                .map(procedure -> modelMapper.map(procedure, ProcedureDTO.class))
                 .collect(Collectors.toList());
     }
 
